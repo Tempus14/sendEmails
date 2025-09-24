@@ -18,9 +18,18 @@ This system sends **infinitely customizable** personalized emails based on CSV d
 ## Quick Setup & First Run
 
 ### 1. Install Dependencies
+(Assuming you are using conda with a given environment ENVIRONMENT_NAME)
 ```bash
-conda run pip install pandas beautifulsoup4 python-dotenv
+# Activate your conda environment first
+conda activate ENVIRONMENT_NAME
+
+# Install most packages through conda (preferred)
+conda install pandas beautifulsoup4 -c conda-forge
+
+# Only use pip for packages not available in conda
+conda run pip install python-dotenv
 ```
+
 
 ### 2. Configure Email Credentials
 Copy `credentials.env_template` to `credentials.env` and fill in your email settings:
