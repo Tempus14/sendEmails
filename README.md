@@ -4,16 +4,58 @@ This system sends **infinitely customizable** personalized emails based on CSV d
 
 ## Key Features
 
-- ✅ **One-File Configuration**: Add unlimited conditions by editing only `email_config.py`
 - ✅ **CSV-based recipient management**: Load recipient data from CSV files  
-- ✅ **Unlimited conditional content**: Workshop participants, VIP members, new users, etc.
-- ✅ **Multiple conditions per recipient**: Recipients can match several conditions simultaneously
+- ✅ **Test mode**: Preview emails without sending
 - ✅ **Personalized content**: Names, personal notes, dynamic greetings
 - ✅ **HTML & Plain text**: Dual-format emails for maximum compatibility
+- ✅ **One-File Configuration**: Add unlimited conditions by editing only `email_config.py`
+- ✅ **Unlimited conditional content**: Workshop participants, VIP members, new users, etc.
+- ✅ **Multiple conditions per recipient**: Recipients can match several conditions simultaneously
 - ✅ **UTF-8 support**: International character support
-- ✅ **Test mode**: Preview emails without sending
 - ✅ **Auto-detection**: System automatically finds and applies all matching conditions
 - ✅ **Error handling**: Graceful handling of missing columns and data issues
+
+## Quick Setup & First Run
+
+### 1. Install Dependencies
+```bash
+conda run pip install pandas beautifulsoup4 python-dotenv
+```
+
+### 2. Configure Email Credentials
+Copy `credentials.env_template` to `credentials.env` and fill in your email settings:
+```env
+SenderMail=your-email@example.com
+SenderPassword=your-password
+SenderServer=smtp.gmail.com
+SenderPort=465
+```
+**⚠️ SECURITY WARNING: Never commit `credentials.env` to version control or upload it to shared cloud storage! This file contains your unencrypted email password.**
+
+### 3. Prepare Your CSV File
+Your CSV file needs at minimum these columns:
+- `Name`: Recipient's name (required)
+- `Mail`: Email address (required)  
+- Any additional columns for conditions (e.g., `Technic`, `Workshop`, `VIP`, `PersonalNote`)
+
+**Minimum example:**
+```csv
+"Name", "Mail"
+"John Doe", "john@example.com"
+"Jane Smith", "jane@example.com"
+```
+
+### 4. Try It Out (Safe Preview Mode)
+```bash
+python main.py
+```
+This shows you what emails would be sent **without actually sending them**. Perfect for testing!
+
+### 5. Send Real Emails (When Ready)
+```bash
+python main.py --send
+```
+This will ask for confirmation before sending.
 
 ## 📁 File Structure
 
@@ -21,14 +63,58 @@ This system sends **infinitely customizable** personalized emails based on CSV d
 sendEmails/
 ├── main.py                        # Main script for sending emails
 ├── newPage.py                     # Email content generation class  
-├── email_config.py                # 🎯 CONFIGURATION FILE - Edit this to add conditions
+├── email_config.py                # CONFIGURATION FILE - Edit this to add conditions
 ├── exampleRecipient.csv           # Sample data with multiple conditions
 ├── credentials.env_template       # Template for email credentials
 ├── credentials.env                # Your email server credentials (not in repo)
 └── README.md                      # This file
 ```
 
-## Quick Start - Adding New Conditions
+**IMPORTANT SECURITY NOTE:** 
+- `credentials.env` contains your unencrypted email password
+- **NEVER** commit it to version control (git)
+- **NEVER** upload it to shared cloud storage (Dropbox, Google Drive, etc.)
+- **NEVER** share it in chat/email/messaging apps
+- Keep it local to your machine only!
+
+## How It Works - Basic Example
+
+The system uses CSV files to manage recipients and applies conditions based on their data.
+
+**Sample CSV (`exampleRecipient.csv`):**
+```csv
+"Name", "Mail", "Technic", "Workshop", "VIP", "PersonalNote"
+"Frodo", "frodo@shire.hobbit", "FALSE", "TRUE", "TRUE", "Welcome to the adventure!"
+"Legolas", "legolas@mirkwood.elf", "TRUE", "FALSE", "TRUE", "Great archery skills!"
+```
+
+**What happens:**
+- Frodo gets: Base email + Workshop content + VIP content + Personal note
+- Legolas gets: Base email + Technical content + VIP content + Personal note
+
+The system automatically detects all matching conditions and builds personalized emails!
+
+## What You'll See When Running
+
+### Preview Mode (Default - Safe!)
+```bash
+python main.py
+```
+- Shows you exactly what each email will look like
+- Lists all recipients and their conditions
+- **No emails are sent** - perfect for testing!
+
+### Send Mode (When You're Ready)
+```bash
+python main.py --send
+```
+- Shows the same preview
+- Asks for confirmation before sending
+- Only then sends the actual emails
+
+## Advanced Customization
+
+### Quick Example - Adding New Conditions
 
 **Want to add a birthday greeting with flexible data? Just edit `email_config.py`:**
 
@@ -148,65 +234,7 @@ Best regards,
 Your Team
 ```
 
-## Setup
-
-1. **Install required packages** (assuming you are using conda):
-   ```bash
-   conda run pip install pandas beautifulsoup4 python-dotenv
-   ```
-
-2. **Create credentials.env file** (you can copy the provided template):
-   ```env
-   SenderMail=your-email@example.com
-   SenderPassword=your-password
-   SenderServer=smtp.gmail.com
-   SenderPort=465
-   ```
-**Never commit `credentials.env` to version control or upload the file together with other files in some shared cloud!!!**
-
-3. **Prepare CSV file** with columns:
-   - `Name`: Recipient's name (required)
-   - `Mail`: Email address (required)
-   - Any additional columns for conditions (e.g., `Technic`, `Workshop`, `VIP`, `PersonalNote`)
-
-## Usage
-
-### Preview Mode (Default - Safe!)
-```bash
-python main.py
-# Shows email previews without sending anything
-```
-
-### Send Mode (Requires confirmation)
-```bash
-python main.py --send
-# Asks for confirmation before actually sending emails
-```
-
-**The system runs in safe preview mode by default!** You must explicitly use `--send` to actually send emails.
-
-## CSV Format
-
-```csv
-"Name", "Mail", "Nickname", "Department", "Birthday", "Age", "Technic", "VIP", "PersonalNote"
-"John Doe", "john@example.com", "Johnny", "Engineering", "TRUE", "25", "TRUE", "TRUE", "Great work!"
-"Jane Smith", "jane@example.com", "", "Marketing", "FALSE", "30", "FALSE", "TRUE", "Excellent campaign!"
-```
-
-**Templates can use ANY CSV column with fallbacks:** `{Nickname|{Name}}` uses nickname or falls back to name!
-
-## Email Personalization
-
-The system automatically:
-- **Personalizes greetings** with recipient names from email templates
-- **Applies all matching conditions** based on CSV data and configuration
-- **Handles personal notes** as conditional content (processed and added to the mails text last)
-- **Supports unlimited conditions** through the configuration file
-- **Generates both HTML and plain text** versions (readable by basically all mail clients and configurations)
-- **Templates are fully configurable** in `email_config.py`
-
-
-## Sample Output
+## Sample Email Output
 
 **For Frodo (Workshop + VIP + New Member + Nickname):**
 ```
@@ -246,9 +274,19 @@ Best regards,
 Your Team
 ```
 
+## Email Features
+
+The system automatically:
+- **Personalizes greetings** with recipient names from email templates
+- **Applies all matching conditions** based on CSV data and configuration
+- **Handles personal notes** as conditional content (processed and added to the mails text last)
+- **Supports unlimited conditions** through the configuration file
+- **Generates both HTML and plain text** versions (readable by basically all mail clients and configurations)
+- **Templates are fully configurable** in `email_config.py`
+
 ## Error Handling
 
-The system handles:
+The system gracefully handles:
 - Missing CSV files
 - Invalid email credentials
 - Network connection issues
