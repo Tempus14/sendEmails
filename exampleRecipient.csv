@@ -1,0 +1,6 @@
+"Name", "Mail", "Nickname", "Department", "Birthday", "Age", "Technic", "Workshop", "VIP", "NewMember", "PersonalNote"
+"Saruman", "upInTheTower@mordor.me", "The White Wizard", "Engineering", "FALSE", "2000", "TRUE", "FALSE", "TRUE", "FALSE", "Remember to bring the ring!"
+"Gandalf", "theWhiteOne@eagle.air", "Mithrandir", "Management", "TRUE", "55000", "FALSE", "TRUE", "FALSE", "FALSE", "Don't forget to bring fireworks!"
+"Frodo", "ringbearer@shire.hobbit", "Mr. Underhill", "Marketing", "FALSE", "50", "FALSE", "TRUE", "TRUE", "TRUE", "Welcome to Middle Earth adventures!"
+"Aragorn", "king@gondor.realm", "Strider", "Engineering", "FALSE", "87", "TRUE", "FALSE", "FALSE", "FALSE", "The throne awaits your return."
+"Legolas", "elfprince@woodland.realm", "", "IT", "TRUE", "2931", "FALSE", "FALSE", "TRUE", "FALSE", ""
